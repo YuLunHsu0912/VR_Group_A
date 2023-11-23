@@ -19,6 +19,7 @@ public class Move_camera : MonoBehaviour
     public GameObject HMD;
 
     public InputActionProperty pinchAnimationAction;
+    public InputActionProperty LeftTrigger;
 
     public GameObject Right_hand;
     public GameObject Left_hand;
@@ -43,12 +44,12 @@ public class Move_camera : MonoBehaviour
             HMD.transform.eulerAngles = _initRotation;
         }
         
-        if (Right_hand.transform.position.z - Left_hand.transform.position.z > Flying_threshold) //fly to left
+        if (Right_hand.transform.position.y - Left_hand.transform.position.y > Flying_threshold) //fly to left
         {
             Debug.Log("Left");
             HMD.transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
         }
-        if(Left_hand.transform.position.z - Right_hand.transform.position.z > Flying_threshold)// fly to right 
+        if(Left_hand.transform.position.y - Right_hand.transform.position.y > Flying_threshold)// fly to right 
         {
             Debug.Log("Right");
             HMD.transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
