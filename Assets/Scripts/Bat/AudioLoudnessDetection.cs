@@ -21,7 +21,7 @@ public class AudioLoudnessDetection : MonoBehaviour
     }
     public void MicrophoneToAudioCLip()
     {
-        string microphoneName = Microphone.devices[0];
+        string microphoneName = Microphone.devices[0];///0 for earphone 1 for oculus
         microphoneClip = Microphone.Start(microphoneName, true, 20,AudioSettings.outputSampleRate);
 
     }

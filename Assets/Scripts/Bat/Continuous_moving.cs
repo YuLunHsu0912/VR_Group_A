@@ -31,7 +31,7 @@ public class Continuous_moving : MonoBehaviour
     public GameObject Right_hand;
     public GameObject Left_hand;
     public float Flying_threshold = 0.1f;
-
+    private Rigidbody rb;
 
     void Start()
     {
@@ -39,6 +39,8 @@ public class Continuous_moving : MonoBehaviour
         bomb.SetActive(false);
         _initPosition = transform.position;
         _initRotation = transform.eulerAngles;
+        rb = HMD.GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     // Update is called once per frame
@@ -47,7 +49,9 @@ public class Continuous_moving : MonoBehaviour
         if (move)
         {
             bomb.SetActive(false);
-            HMD.transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            
+            Vector3 movement = new Vector3(0,0,1);
+            rb.velocity = movement;
         }
         float trigger = pinchAnimationAction.action.ReadValue<float>();
         float leftTrigger = LeftTrigger.action.ReadValue<float>();
