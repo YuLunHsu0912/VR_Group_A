@@ -7,11 +7,13 @@ public class AudioLoudnessDetection : MonoBehaviour
     // Start is called before the first frame update
     public int sampleWindow = 64;
     private AudioClip microphoneClip;
+    [Tooltip("0 for earphone, 1 for ocoulus")]
+    public int index=0;
  
     void Start()
     {
         MicrophoneToAudioCLip();
-        Debug.Log(Microphone.devices[0]); ///0 for earphone 1 for oculus
+        Debug.Log(Microphone.devices[index]); ///0 for earphone 1 for oculus
     }
 
     // Update is called once per frame
@@ -21,13 +23,13 @@ public class AudioLoudnessDetection : MonoBehaviour
     }
     public void MicrophoneToAudioCLip()
     {
-        string microphoneName = Microphone.devices[0];///0 for earphone 1 for oculus
+        string microphoneName = Microphone.devices[index];///0 for earphone 1 for oculus
         microphoneClip = Microphone.Start(microphoneName, true, 20,AudioSettings.outputSampleRate);
 
     }
     public float GetLoudnessFromMicrophone()
     {
-        return getLoudnessFromAudioClip(Microphone.GetPosition(Microphone.devices[0]), microphoneClip);
+        return getLoudnessFromAudioClip(Microphone.GetPosition(Microphone.devices[index]), microphoneClip);
     }
     public float getLoudnessFromAudioClip(int clipPosition, AudioClip clip)
     {
