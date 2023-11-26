@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Continuous_moving : MonoBehaviour
 {
-    public float moveSpeed = 2f;
+    public float moveSpeed = 5f;
+    public float rotationSpeed = 2f;
     public GameObject HMD;
     public bool move ;
     public bool leftRight;
@@ -22,8 +23,21 @@ public class Continuous_moving : MonoBehaviour
     private Rigidbody rb;
     private bool end;
     public GameObject crystal;
+    public float accelerationDuration = 2f; // Set the duration of acceleration
+    public float decelerationDuration = 2f; // Set the duration of deceleration
+    private float currentSpeed = 0f;
+    private float timer = 0f;
+
+    public GameObject TargetPosition;
+    public bool endtest;
+    public GameObject Endtest;
+    public float lerpTime=3f;
     void Start()
     {
+        if (endtest)
+        {
+            transform.position = Endtest.transform.position;
+        }
         leftRight = true;
         end = false;
         move = false;
@@ -32,6 +46,7 @@ public class Continuous_moving : MonoBehaviour
         rb = HMD.GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         crystal.SetActive(false);
+        
     }
 
     // Update is called once per frame
@@ -48,10 +63,12 @@ public class Continuous_moving : MonoBehaviour
                     move = false;
                     Vector3 movement = new Vector3(0, 0, 0);
                     rb.velocity = movement;
+                    timer = 0f;
                 }
                 else
                 {
                     move = true;
+                    timer = 0f;
                 }
             }
             if (trigger > 0.5)
@@ -61,12 +78,39 @@ public class Continuous_moving : MonoBehaviour
             }
             if (move)
             {
-                Vector3 movement = new Vector3(0, 0, 1);
-                rb.velocity = movement;
-            }else
+                /// Vector3 movement = new Vector3(0, 0, moveSpeed);
+                ///rb.velocity = movement;
+                timer += Time.deltaTime;
+
+                // Use Mathf.Lerp to smoothly interpolate between 0 and targetSpeed over time
+                currentSpeed = Mathf.Lerp(0f, moveSpeed, timer / accelerationDuration);
+
+                // Update the Rigidbody's velocity with the new Z speed
+                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, currentSpeed);
+
+                if (timer >= accelerationDuration)
+                {
+                    // Stop further acceleration
+                    timer = accelerationDuration;
+                }
+            }
+            else
             {
-                Vector3 movement = new Vector3(0, 0, 0);
-                rb.velocity = movement;
+                ///Vector3 movement = new Vector3(0, 0, 0);
+                ///rb.velocity = movement;
+                timer += Time.deltaTime;
+
+                // Use Mathf.Lerp to smoothly interpolate between the current speed and 0 over time
+                currentSpeed = Mathf.Lerp(rb.velocity.z, 0f, timer / decelerationDuration);
+
+                // Update the Rigidbody's velocity with the new Z speed
+                rb.velocity = new Vector3(0, 0, currentSpeed);
+
+                if (timer >= decelerationDuration)
+                {
+                    // Stop further deceleration
+                    timer = decelerationDuration;
+                }
             }
             if (leftRight)
             {
@@ -81,7 +125,11 @@ public class Continuous_moving : MonoBehaviour
             }
 
         }
-        
+        if(!end)
+        {
+            Vector3 zeroy = transform.position;
+            transform.position = new Vector3(zeroy.x,_initPosition.y, zeroy.z);
+        }
         
 
     }
@@ -100,14 +148,22 @@ public class Continuous_moving : MonoBehaviour
     }
     private IEnumerator MoveToZero()
     {
-        Vector3 finalTargetPosition = new Vector3(_initPosition.x, _initPosition.y, transform.position.z);
-        while (Vector3.Distance(transform.position, finalTargetPosition) > 0.1f)
+        float elapsedTime = 0f;
+        Vector3 initialPosition = transform.position;
+        Vector3 finalTargetPosition = TargetPosition.transform.position;
+
+        while (elapsedTime < lerpTime)
         {
-            transform.position = Vector3.MoveTowards(transform.position, finalTargetPosition, moveSpeed/5 * Time.deltaTime);
+            // Move towards the target position
+            transform.position = Vector3.Lerp(initialPosition, finalTargetPosition, elapsedTime / lerpTime);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        // Ensure the camera reaches the exact target position
-        transform.position = finalTargetPosition;
+        Debug.Log("here");
+        // Ensure the camera reaches the exact target position and rotation
+        //transform.position = finalTargetPosition;
+        yield return new WaitForSeconds(0.5f);
         crystal.SetActive(true);
+        Debug.Log("end");
     }
 }
