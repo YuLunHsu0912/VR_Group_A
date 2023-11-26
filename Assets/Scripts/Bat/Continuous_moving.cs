@@ -32,6 +32,7 @@ public class Continuous_moving : MonoBehaviour
     public bool endtest;
     public GameObject Endtest;
     public float lerpTime=3f;
+    public GameObject SoundSource;
     void Start()
     {
         if (endtest)
@@ -48,11 +49,13 @@ public class Continuous_moving : MonoBehaviour
         crystal.SetActive(false);
         
     }
-
+    private Vector3 velocity = Vector3.zero;
     // Update is called once per frame
     void Update()
     {
-        if(end!=true)
+        
+        //transform.position = Vector3.SmoothDamp(transform.position, TargetPosition.transform.position,ref velocity, 10f);
+        if (end!=true)
         {
             float trigger = pinchAnimationAction.action.ReadValue<float>();
             bool leftTrigger = LeftTrigger.action.triggered;
@@ -130,7 +133,14 @@ public class Continuous_moving : MonoBehaviour
             Vector3 zeroy = transform.position;
             transform.position = new Vector3(zeroy.x,_initPosition.y, zeroy.z);
         }
-        
+        if(end)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, TargetPosition.transform.position, ref velocity, 3f);
+        }
+        if (Vector3.Distance(transform.position, TargetPosition.transform.position) < 0.1f)
+        {
+            crystal.SetActive(true);
+        }
 
     }
     private void OnTriggerEnter(Collider other)
@@ -143,7 +153,8 @@ public class Continuous_moving : MonoBehaviour
             rb.velocity = movement;
             leftRight = false;
             end = true;
-            StartCoroutine(MoveToZero());
+            SoundSource.SetActive(false);
+            //StartCoroutine(MoveToZero());
         }
     }
     private IEnumerator MoveToZero()

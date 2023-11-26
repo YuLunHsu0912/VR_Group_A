@@ -21,7 +21,7 @@ public class OnToufh : MonoBehaviour
         if(other.gameObject.tag=="Hand")
         {
             text.SetActive(true);
-
+            gameObject.SetActive(false);
         }
     }
 }
