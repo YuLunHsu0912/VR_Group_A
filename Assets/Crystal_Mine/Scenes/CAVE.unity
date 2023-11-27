@@ -5606,7 +5606,7 @@ MonoBehaviour:
   accelerationDuration: 2
   decelerationDuration: 2
   TargetPosition: {fileID: 839646120}
-  endtest: 1
+  endtest: 0
   Endtest: {fileID: 188603570}
   lerpTime: 3
   SoundSource: {fileID: 857871562}
@@ -46058,8 +46058,8 @@ MonoBehaviour:
     type: 3}
   detector: {fileID: 1900975579}
   loudnessSensibility: 100
-  threshold: 1
-  KeyboardToProduceSound: 1
+  threshold: 0
+  KeyboardToProduceSound: 0
 --- !u!1001 &858193991
 PrefabInstance:
   m_ObjectHideFlags: 0

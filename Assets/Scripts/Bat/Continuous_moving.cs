@@ -39,7 +39,7 @@ public class Continuous_moving : MonoBehaviour
         {
             transform.position = Endtest.transform.position;
         }
-        leftRight = true;
+        leftRight = false;
         end = false;
         move = false;
         _initPosition = transform.position;
@@ -64,6 +64,7 @@ public class Continuous_moving : MonoBehaviour
                 if (move == true)
                 {
                     move = false;
+                    leftRight = false;
                     Vector3 movement = new Vector3(0, 0, 0);
                     rb.velocity = movement;
                     timer = 0f;
@@ -72,6 +73,7 @@ public class Continuous_moving : MonoBehaviour
                 {
                     move = true;
                     timer = 0f;
+                    leftRight = true;
                 }
             }
             if (trigger > 0.5)
