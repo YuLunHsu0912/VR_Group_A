@@ -22,6 +22,7 @@ public class OnToufh : MonoBehaviour
         {
             text.SetActive(true);
             gameObject.SetActive(false);
+            Debug.Log("hand!");
         }
     }
 }
