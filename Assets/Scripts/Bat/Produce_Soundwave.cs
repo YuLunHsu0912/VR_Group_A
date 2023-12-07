@@ -12,6 +12,7 @@ public class Produce_Soundwave : MonoBehaviour
     public float loudnessSensibility = 100;
     public float threshold = 10f;
     public bool KeyboardToProduceSound = true;
+    public Continuous_moving script;
     void Start()
     {
 
@@ -27,14 +28,16 @@ public class Produce_Soundwave : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))///
             {
                 Instantiate(myPrefab, transform.position, Quaternion.identity); //後面加,transform會直接變成這個onject小孩
+                Debug.Log("here");
+                script.makeNoise = true;
             }
         }
-       
         else
         {
             if(loudness>threshold)///
             {
                 Instantiate(myPrefab, transform.position, Quaternion.identity); //後面加,transform會直接變成這個onject小孩
+                script.makeNoise = true;
             }
         }
 

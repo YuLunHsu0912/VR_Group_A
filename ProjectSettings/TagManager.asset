@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Destination
   - Hand
+  - TurnLeft
+  - LeftOK
+  - RightOK
   layers:
   - Default
   - TransparentFX
